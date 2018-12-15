@@ -68,6 +68,18 @@ class TestElement(unittest.TestCase):
         sut = self._init_sut(element)
         self.assertRaises(element_wrapper.TimeoutException, sut.click)
 
+    def test_bind_browser_js(self):
+        element = mock.Mock()
+        element.parent = mock.Mock()
+
+        sut = self._init_sut(element)
+        sut.bind_browser_js('test_func', '<test_mock_js>')
+        sut.test_func('arg1', 'arg2')
+
+        expect = mock.call('<test_mock_js>', element, 'arg1', 'arg2')
+        actual = element.parent.execute_script.call_args
+        self.assertEqual(actual, expect)
+
 
 class TestElementList(unittest.TestCase):
     def _init_sut(self, *args, **kargs):
