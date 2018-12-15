@@ -26,7 +26,7 @@ class TestElement(unittest.TestCase):
         self.assertTrue(element.click.called)
 
     @mock.patch('time.time')
-    def test_click(self, mock_time):
+    def test_click_retry(self, mock_time):
         element = mock.Mock()
         exceptions_to_be_raised = iter([element_wrapper.WebDriverException])
 
