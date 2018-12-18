@@ -73,8 +73,7 @@ class TestElement(unittest.TestCase):
         element.parent = mock.Mock()
 
         sut = self._init_sut(element)
-        sut.bind_browser_js('test_func', '<test_mock_js>')
-        sut.test_func('arg1', 'arg2')
+        sut.execute_js_on_browser('<test_mock_js>', 'arg1', 'arg2')
 
         expect = mock.call('<test_mock_js>', element, 'arg1', 'arg2')
         actual = element.parent.execute_script.call_args
@@ -89,6 +88,27 @@ class TestElementList(unittest.TestCase):
         elements = [mock.Mock()]
         sut = self._init_sut(elements)
         self.assertTrue(sut)
+
+    def test_iter(self):
+        mock_element = mock.Mock()
+        elements = [mock_element]
+        sut = self._init_sut(elements)
+        for item in sut:
+            self.assertEqual(mock_element, item._element)
+
+    def test_getitem(self):
+        mock_element = mock.Mock()
+        elements = [mock_element]
+        sut = self._init_sut(elements)
+        self.assertEqual(mock_element, sut[0]._element)
+
+    def test_add(self):
+        elements_1 = [mock.Mock()]
+        elements_2 = [mock.Mock(), mock.Mock()]
+        sut_1 = self._init_sut(elements_1)
+        sut_2 = self._init_sut(elements_2)
+        sut_1 += sut_2
+        self.assertEqual(len(sut_1), 3)
 
 
 if __name__ == '__main__':
