@@ -1,5 +1,4 @@
 import time
-import functools
 from selenium.common.exceptions import WebDriverException, TimeoutException
 
 
