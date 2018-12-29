@@ -1,5 +1,6 @@
 import time
 import re
+from utils.webdriver import execute_js_on_browser
 from selenium.common.exceptions import WebDriverException, TimeoutException
 
 
@@ -14,8 +15,7 @@ class Element(object):
             raise AttributeError
 
     def execute_js_on_browser(self, browser_js, *args):
-        driver = self._element.parent
-        return driver.execute_script(browser_js, self._element, *args)
+        return execute_js_on_browser(self._element, browser_js, *args)
 
     def click(self, timeout=5):
         start = time.time()

@@ -20,6 +20,11 @@ _DEBUG = False
 #     return driver.execute_script("return arguments[0].getPointAtLength(arguments[1]);", element, length)
 
 
+def execute_js_on_browser(element, browser_js, *args):
+    driver = element.parent
+    return driver.execute_script(browser_js, element, *args)
+
+
 def highlight_one(element, color='aquamarine'):
     """Highlights (blinks) a Selenium Webdriver element"""
     driver = element.parent
