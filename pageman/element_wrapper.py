@@ -1,4 +1,5 @@
 import time
+import re
 from selenium.common.exceptions import WebDriverException, TimeoutException
 
 
@@ -58,6 +59,27 @@ class ElementList(object):
     def get_element_class(self):
         return self._element_class
 
+    def search(self, **kwargs):
+        if len(kwargs.keys()) != 1:
+            raise ElementListAmbiguousSearch()
+        found = []
+        criteria_key, criteria_value = kwargs.keys()[0], kwargs.values()[0]
+        for element in self._elements:
+            if criteria_key.endswith('_'):
+                # in case if key is python reserved word
+                criteria_key = criteria_key[:-1]
+            if criteria_key == 'text':
+                element_value = element.text
+            else:
+                element_value = element.get_attribute(criteria_key)
+            if re.search(criteria_value, element_value):
+                found.append(element)
+        return ElementList(found)
+
 
 class ElementListClassNotIdentical(Exception):
+    pass
+
+
+class ElementListAmbiguousSearch(Exception):
     pass

@@ -110,6 +110,34 @@ class TestElementList(unittest.TestCase):
         sut_1 += sut_2
         self.assertEqual(len(sut_1), 3)
 
+    def test_search(self):
+        mock_element_text = mock.Mock()
+        mock_element_text.text = 'mock_text'
+        mock_element_class = mock.Mock()
+        mock_element_class.text = 'mock_class'
+        mock_element_style = mock.Mock()
+        mock_element_style.text = 'mock_style'
+
+        def mock_get_attribute(key):
+            return 'mock_attr_' + key
+
+        mock_element_text.get_attribute.side_effect = mock_get_attribute
+        mock_element_class.get_attribute.side_effect = mock_get_attribute
+
+        def mock_get_attribute_style(_):
+            return 'mock_attr_style_target'
+
+        mock_element_style.get_attribute.side_effect = mock_get_attribute_style
+        elements = [mock_element_text, mock_element_class, mock_element_style]
+        sut = self._init_sut(elements)
+
+        acutal_text = sut.search(text='text')
+        self.assertEqual(acutal_text.get_elements(), [mock_element_text])
+        actual_all = sut.search(class_='attr_class')
+        self.assertEqual(actual_all.get_elements(), [mock_element_text, mock_element_class])
+        actual_style = sut.search(style='attr_style_target')
+        self.assertEqual(actual_style.get_elements(), [mock_element_style])
+
 
 if __name__ == '__main__':
     unittest.main()
