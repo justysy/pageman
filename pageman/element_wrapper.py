@@ -8,6 +8,9 @@ class Element(object):
     def __init__(self, element):
         self._element = element
 
+    def get_element(self):
+        return self._element
+
     def __getattr__(self, item):
         if hasattr(self._element, item):
             return getattr(self._element, item)
