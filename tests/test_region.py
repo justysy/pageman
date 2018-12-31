@@ -4,19 +4,19 @@ from context import region
 
 
 class TestRegion(unittest.TestCase):
-    def _init(self):
+    def _init_sut(self):
         self._mock_root = mock.Mock()
         return region.Region(root=self._mock_root)
 
     def test_init(self):
-        sut = self._init()
+        sut = self._init_sut()
         self.assertNotEqual(sut, None)
 
     @mock.patch('pageman.region.wait_element_presence')
     def test_find_element(self, mock_wait_presence):
         mock_element = mock.Mock()
         mock_wait_presence.return_value = mock_element
-        sut = self._init()
+        sut = self._init_sut()
         actual = sut.find_element('<mock_locator>')
         self.assertEqual(actual.get_element(), mock_element)
         actual_call = mock_wait_presence.call_args
@@ -27,7 +27,7 @@ class TestRegion(unittest.TestCase):
     def test_find_cached_element(self, mock_wait_presence):
         mock_element = mock.Mock()
         mock_wait_presence.return_value = mock_element
-        sut = self._init()
+        sut = self._init_sut()
         actual = sut.find_element('<mock_locator>')
         self.assertEqual(actual.get_element(), mock_element)
         cache = sut.find_element('<mock_locator>')
@@ -39,7 +39,7 @@ class TestRegion(unittest.TestCase):
     def test_find_elements(self, mock_wait_all_presence):
         mock_element = mock.Mock()
         mock_wait_all_presence.return_value = [mock_element]
-        sut = self._init()
+        sut = self._init_sut()
         actual = sut.find_elements('<mock_locator>')
         self.assertEqual(actual.get_elements(), [mock_element])
         actual_call = mock_wait_all_presence.call_args
@@ -50,7 +50,7 @@ class TestRegion(unittest.TestCase):
     def test_find_cache_elements(self, mock_wait_all_presence):
         mock_element = mock.Mock()
         mock_wait_all_presence.return_value = [mock_element]
-        sut = self._init()
+        sut = self._init_sut()
         actual = sut.find_elements('<mock_locator>')
         self.assertEqual(actual.get_elements(), [mock_element])
         cached = sut.find_elements('<mock_locator>')
