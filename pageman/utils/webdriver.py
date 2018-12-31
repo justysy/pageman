@@ -120,15 +120,16 @@ def mouse_to_location(driver, x, y):
     actions.perform()
 
 
-def mouse_to_element(driver, element, xoffset, yoffset):
+def mouse_to_element(driver, element, offset=None):
     actions = ActionChains(driver)
-    if xoffset == 0 and yoffset == 0:
+    if offset is None:
         # actions.move_to_element(element)
         size = element.size
         actions.move_to_element_with_offset(element, int(size['width']/2.), int(size['height']/2.))
         # actions.move_by_offset(xoffset=xoffset, yoffset=yoffset)
     else:
-        actions.move_to_element_with_offset(element, xoffset, yoffset)
+        x_offset, y_offset = offset
+        actions.move_to_element_with_offset(element, x_offset, y_offset)
     actions.perform()
 
 
