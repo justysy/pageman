@@ -7,13 +7,15 @@ class Region(object):
         self._root = root
         self._cache = dict()
 
+    def wait_for_ready(self):
+        return False
+
     def _set_cache(self, key, value):
         self._cache[key] = value
 
     def find_element(self, locator, element_class=None, cacheable=True):
         if locator in self._cache:
             return self._cache[locator]
-
         _element = wait_element_presence(locator=locator, root=self._root, timeout=10)
         _element_wrapper = None
         if element_class is not None:
@@ -27,7 +29,6 @@ class Region(object):
     def find_elements(self, locator, element_class=None, cacheable=True):
         if locator in self._cache:
             return self._cache[locator]
-
         _elements = wait_all_elements_presence(locator=locator, root=self._root, timeout=10)
         _elements_wrapper = None
         if element_class is not None:
@@ -37,4 +38,3 @@ class Region(object):
         if cacheable:
             self._set_cache(locator, _elements_wrapper)
         return _elements_wrapper
-
