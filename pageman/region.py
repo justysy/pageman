@@ -3,8 +3,8 @@ from element_wrapper import Element, ElementList
 
 
 class Region(object):
-    def __init__(self, root):
-        self._root = root
+    def __init__(self, driver):
+        self._driver = driver
         self._cache = dict()
 
     def wait_for_ready(self):
@@ -16,7 +16,7 @@ class Region(object):
     def find_element(self, locator, element_class=None, cacheable=True):
         if locator in self._cache:
             return self._cache[locator]
-        _element = wait_element_presence(locator=locator, root=self._root, timeout=10)
+        _element = wait_element_presence(locator=locator, root=self._driver, timeout=10)
         _element_wrapper = None
         if element_class is not None:
             _element_wrapper = element_class(element=_element)
@@ -29,7 +29,7 @@ class Region(object):
     def find_elements(self, locator, element_class=None, cacheable=True):
         if locator in self._cache:
             return self._cache[locator]
-        _elements = wait_all_elements_presence(locator=locator, root=self._root, timeout=10)
+        _elements = wait_all_elements_presence(locator=locator, root=self._driver, timeout=10)
         _elements_wrapper = None
         if element_class is not None:
             _elements_wrapper = ElementList(elements=_elements, element_class=element_class)
