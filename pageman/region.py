@@ -6,6 +6,13 @@ class Region(object):
     def __init__(self, driver):
         self._driver = driver
         self._cache = dict()
+        self._root_locator = None
+
+    @property
+    def root(self):
+        if self._root_locator is None:
+            raise NotImplementedError
+        return self.find_element(self._root_locator)
 
     def wait_for_ready(self):
         return False

@@ -58,6 +58,11 @@ class TestRegion(unittest.TestCase):
         actual_call_count = len(mock_wait_all_presence.call_args_list)
         self.assertEqual(actual_call_count, 1)
 
+    def test_root_not_implemented(self):
+        sut = self._init_sut()
+        with self.assertRaises(NotImplementedError):
+            _ = sut.root
+
 
 if __name__ == '__main__':
     unittest.main()
