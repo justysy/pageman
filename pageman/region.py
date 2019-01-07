@@ -23,25 +23,23 @@ class Region(object):
     def find_element(self, locator, element_class=None, cacheable=True):
         if locator in self._cache:
             return self._cache[locator]
-        _element = wait_element_presence(locator=locator, root=self._driver, timeout=10)
-        _element_wrapper = None
+        element = wait_element_presence(locator=locator, root=self._driver, timeout=10)
         if element_class is not None:
-            _element_wrapper = element_class(element=_element)
+            element_wrapper = element_class(element=element)
         else:
-            _element_wrapper = Element(element=_element)
+            element_wrapper = Element(element=element)
         if cacheable:
-            self._set_cache(locator, _element_wrapper)
-        return _element_wrapper
+            self._set_cache(locator, element_wrapper)
+        return element_wrapper
 
     def find_elements(self, locator, element_class=None, cacheable=True):
         if locator in self._cache:
             return self._cache[locator]
-        _elements = wait_all_elements_presence(locator=locator, root=self._driver, timeout=10)
-        _elements_wrapper = None
+        elements = wait_all_elements_presence(locator=locator, root=self._driver, timeout=10)
         if element_class is not None:
-            _elements_wrapper = ElementList(elements=_elements, element_class=element_class)
+            elements_wrapper = ElementList(elements=elements, element_class=element_class)
         else:
-            _elements_wrapper = ElementList(elements=_elements)
+            elements_wrapper = ElementList(elements=elements)
         if cacheable:
-            self._set_cache(locator, _elements_wrapper)
-        return _elements_wrapper
+            self._set_cache(locator, elements_wrapper)
+        return elements_wrapper
