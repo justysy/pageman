@@ -7,10 +7,7 @@ class Region(object):
         self._driver = driver
         self._cache = dict()
         self._root_locator = None
-        try:
-            self.wait_for_ready()
-        except NotImplementedError:
-            pass
+        self.wait_for_ready()
 
     @property
     def root(self):
@@ -22,7 +19,7 @@ class Region(object):
         )
 
     def wait_for_ready(self):
-        raise NotImplementedError
+        pass
 
     def _set_cache(self, key, value):
         self._cache[key] = value
