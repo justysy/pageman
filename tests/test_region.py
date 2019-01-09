@@ -3,10 +3,16 @@ import mock
 from context import region
 
 
+class RegionForTest(region.Region):
+    def __init__(self, driver):
+        self._root_locator = '<mock root locator>'
+        super(RegionForTest, self).__init__(driver)
+
+
 class TestRegion(unittest.TestCase):
     def _init_sut(self):
         self._mock_driver = mock.Mock()
-        sut = region.Region(driver=self._mock_driver)
+        sut = RegionForTest(driver=self._mock_driver)
         return sut
 
     def test_init(self):
@@ -89,9 +95,8 @@ class TestRegion(unittest.TestCase):
         self.assertEqual(actual_calls, expected_calls)
 
     def test_root_not_implemented(self):
-        sut = self._init_sut()
         with self.assertRaises(NotImplementedError):
-            _ = sut.root
+            _ = region.Region(mock.Mock())
 
 
 if __name__ == '__main__':
