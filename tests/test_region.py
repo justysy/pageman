@@ -98,6 +98,22 @@ class TestRegion(unittest.TestCase):
         with self.assertRaises(NotImplementedError):
             _ = region.Region(mock.Mock())
 
+    @mock.patch('pageman.region.wait_element_presence')
+    def test_set_presence_timeout(self, mock_wait_presence):
+        mock_element = mock.Mock()
+        mock_wait_presence.return_value = mock_element
+        sut = self._init_sut()
+        sut._root_locator = '<mock_root_locator>'
+        sut.set_presence_timeout(5)
+        actual = sut.find_element('<mock_locator>')
+        self.assertEqual(actual.get_element(), mock_element)
+        actual_calls = mock_wait_presence.call_args_list
+        expected_calls = [
+            mock.call(locator='<mock_root_locator>', root=sut._driver, timeout=5),
+            mock.call(locator='<mock_locator>', root=sut.root, timeout=5)
+        ]
+        self.assertEqual(actual_calls, expected_calls)
+
 
 if __name__ == '__main__':
     unittest.main()

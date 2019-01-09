@@ -3,9 +3,10 @@ from element_wrapper import Element, ElementList
 
 
 class Region(object):
-    def __init__(self, driver):
+    def __init__(self, driver, presence_timeout=10):
         self._driver = driver
         self._cache = dict()
+        self.presence_timeout = presence_timeout
         if getattr(self, '_root_locator', None) is None:
             raise NotImplementedError('_root_locator')
         self._wait_for_ready()
@@ -23,12 +24,15 @@ class Region(object):
     def _set_cache(self, key, value):
         self._cache[key] = value
 
+    def set_presence_timeout(self, presence_timeout):
+        self.presence_timeout = presence_timeout
+
     def find_element(self, locator, root=None, element_class=None, cacheable=True):
         if root is None:
             root = self.root
         if locator in self._cache:
             return self._cache[locator]
-        element = wait_element_presence(locator=locator, root=root, timeout=10)
+        element = wait_element_presence(locator=locator, root=root, timeout=self.presence_timeout)
         if element_class is not None:
             element_wrapper = element_class(element=element)
         else:
@@ -42,7 +46,7 @@ class Region(object):
             root = self.root
         if locator in self._cache:
             return self._cache[locator]
-        elements = wait_all_elements_presence(locator=locator, root=root, timeout=10)
+        elements = wait_all_elements_presence(locator=locator, root=root, timeout=self.presence_timeout)
         if element_class is not None:
             elements_wrapper = ElementList(elements=elements, element_class=element_class)
         else:
