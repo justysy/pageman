@@ -102,6 +102,12 @@ class TestElementList(unittest.TestCase):
         sut = self._init_sut(elements)
         self.assertEqual(mock_element, sut[0]._element)
 
+    def test_get_first(self):
+        mock_element = mock.Mock()
+        elements = [mock_element]
+        sut = self._init_sut(elements)
+        self.assertEqual(mock_element, sut.first()._element)
+
     def test_add(self):
         elements_1 = [mock.Mock()]
         elements_2 = [mock.Mock(), mock.Mock()]

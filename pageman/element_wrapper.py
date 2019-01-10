@@ -79,6 +79,12 @@ class ElementList(object):
                 found.append(element)
         return ElementList(found)
 
+    def first(self):
+        if len(self._elements) > 0:
+            return self._element_class(self._elements[0])
+        else:
+            return None
+
 
 class ElementListClassNotIdentical(Exception):
     pass

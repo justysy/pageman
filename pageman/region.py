@@ -36,6 +36,8 @@ class Region(object):
             if isinstance(_, ElementList):
                 if len(_) == 0:
                     raise NoSuchElementException
+            elif _ is None:
+                raise NoSuchElementException
         finally:
             self.set_presence_timeout(original_presence_timeout)
 
