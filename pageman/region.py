@@ -30,8 +30,10 @@ class Region(object):
     def check(self, element_name):
         original_presence_timeout = self.presence_timeout
         self.set_presence_timeout(.1)
-        _ = getattr(self, element_name)
-        self.set_presence_timeout(original_presence_timeout)
+        try:
+            _ = getattr(self, element_name)
+        finally:
+            self.set_presence_timeout(original_presence_timeout)
 
     def find_element(self, locator, root=None, element_class=None, cacheable=True):
         if root is None:
