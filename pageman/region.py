@@ -1,3 +1,4 @@
+from selenium.common.exceptions import NoSuchElementException
 from utils.webdriver import wait_element_presence, wait_all_elements_presence
 from element_wrapper import Element, ElementList
 
@@ -32,6 +33,9 @@ class Region(object):
         self.set_presence_timeout(.1)
         try:
             _ = getattr(self, element_name)
+            if isinstance(_, ElementList):
+                if len(_) == 0:
+                    raise NoSuchElementException
         finally:
             self.set_presence_timeout(original_presence_timeout)
 

@@ -1,5 +1,6 @@
 import unittest
 import mock
+from selenium.common.exceptions import NoSuchElementException
 from context import region
 
 
@@ -12,6 +13,11 @@ class RegionForTest(region.Region):
     def test_element(self):
         locator = '<mock_locator>'
         return self.find_element(locator)
+
+    @property
+    def test_element_list(self):
+        locator = '<mock_locator>'
+        return self.find_elements(locator)
 
 
 class TestRegion(unittest.TestCase):
@@ -34,6 +40,22 @@ class TestRegion(unittest.TestCase):
         actual_calls = mock_wait_presence.call_args_list
         expected_calls = [
             mock.call(locator='<mock_root_locator>', root=sut._driver, timeout=.1),
+            mock.call(locator='<mock_locator>', root=sut.root, timeout=.1)
+        ]
+        self.assertEqual(actual_calls, expected_calls)
+
+    @mock.patch('pageman.region.wait_element_presence')
+    @mock.patch('pageman.region.wait_all_elements_presence')
+    def test_check_elements(self, mock_wait_all_presence, mock_wait_presence):
+        mock_element = mock.Mock()
+        mock_wait_presence.return_value = mock_element
+        mock_wait_all_presence.return_value = []
+        sut = self._init_sut()
+        sut._root_locator = '<mock_root_locator>'
+        with self.assertRaises(NoSuchElementException):
+            sut.check('test_element_list')
+        actual_calls = mock_wait_all_presence.call_args_list
+        expected_calls = [
             mock.call(locator='<mock_locator>', root=sut.root, timeout=.1)
         ]
         self.assertEqual(actual_calls, expected_calls)
