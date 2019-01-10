@@ -8,6 +8,11 @@ class RegionForTest(region.Region):
         self._root_locator = '<mock root locator>'
         super(RegionForTest, self).__init__(driver)
 
+    @property
+    def test_element(self):
+        locator = '<mock_locator>'
+        return self.find_element(locator)
+
 
 class TestRegion(unittest.TestCase):
     def _init_sut(self):
@@ -18,6 +23,20 @@ class TestRegion(unittest.TestCase):
     def test_init(self):
         sut = self._init_sut()
         self.assertNotEqual(sut, None)
+
+    @mock.patch('pageman.region.wait_element_presence')
+    def test_check_element(self, mock_wait_presence):
+        mock_element = mock.Mock()
+        mock_wait_presence.return_value = mock_element
+        sut = self._init_sut()
+        sut._root_locator = '<mock_root_locator>'
+        sut.check('test_element')
+        actual_calls = mock_wait_presence.call_args_list
+        expected_calls = [
+            mock.call(locator='<mock_root_locator>', root=sut._driver, timeout=.1),
+            mock.call(locator='<mock_locator>', root=sut.root, timeout=.1)
+        ]
+        self.assertEqual(actual_calls, expected_calls)
 
     @mock.patch('pageman.region.wait_element_presence')
     def test_find_element(self, mock_wait_presence):
