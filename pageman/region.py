@@ -44,27 +44,31 @@ class Region(object):
     def find_element(self, locator, root=None, element_class=None, cacheable=True):
         if root is None:
             root = self.root
-        if locator in self._cache:
-            return self._cache[locator]
+        cache_id = (locator, root, element_class)
+        if cacheable:
+            if cache_id in self._cache:
+                return self._cache[cache_id]
         element = wait_element_presence(locator=locator, root=root, timeout=self.presence_timeout)
         if element_class is not None:
             element_wrapper = element_class(element=element)
         else:
             element_wrapper = Element(element=element)
         if cacheable:
-            self._set_cache(locator, element_wrapper)
+            self._set_cache(cache_id, element_wrapper)
         return element_wrapper
 
     def find_elements(self, locator, root=None, element_class=None, cacheable=True):
         if root is None:
             root = self.root
-        if locator in self._cache:
-            return self._cache[locator]
+        cache_id = (locator, root, element_class)
+        if cacheable:
+            if cache_id in self._cache:
+                return self._cache[cache_id]
         elements = wait_all_elements_presence(locator=locator, root=root, timeout=self.presence_timeout)
         if element_class is not None:
             elements_wrapper = ElementList(elements=elements, element_class=element_class)
         else:
             elements_wrapper = ElementList(elements=elements)
         if cacheable:
-            self._set_cache(locator, elements_wrapper)
+            self._set_cache(cache_id, elements_wrapper)
         return elements_wrapper
