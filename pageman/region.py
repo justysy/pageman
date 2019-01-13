@@ -26,7 +26,7 @@ class Region(object):
         )
 
     def _wait_for_ready(self):
-        pass
+        return self.root is not None
 
     def _set_cache(self, key, value):
         self._cache[key] = value
