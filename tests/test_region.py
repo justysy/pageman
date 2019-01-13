@@ -5,9 +5,9 @@ from context import region
 
 
 class RegionForTest(region.Region):
-    def __init__(self, driver):
+    def __init__(self, ancestor):
         self._root_locator = '<mock root locator>'
-        super(RegionForTest, self).__init__(driver)
+        super(RegionForTest, self).__init__(ancestor)
 
     @property
     def test_element(self):
@@ -23,7 +23,7 @@ class RegionForTest(region.Region):
 class TestRegion(unittest.TestCase):
     def _init_sut(self):
         self._mock_driver = mock.Mock()
-        sut = RegionForTest(driver=self._mock_driver)
+        sut = RegionForTest(self._mock_driver)
         return sut
 
     def test_init(self):
@@ -39,7 +39,7 @@ class TestRegion(unittest.TestCase):
         sut.check('test_element')
         actual_calls = mock_wait_presence.call_args_list
         expected_calls = [
-            mock.call(locator='<mock_root_locator>', root=sut._driver, timeout=.1),
+            mock.call(locator='<mock_root_locator>', root=self._mock_driver, timeout=.1),
             mock.call(locator='<mock_locator>', root=sut.root, timeout=.1)
         ]
         self.assertEqual(actual_calls, expected_calls)
@@ -70,7 +70,7 @@ class TestRegion(unittest.TestCase):
         self.assertEqual(actual.get_element(), mock_element)
         actual_calls = mock_wait_presence.call_args_list
         expected_calls = [
-            mock.call(locator='<mock_root_locator>', root=sut._driver, timeout=10),
+            mock.call(locator='<mock_root_locator>', root=self._mock_driver, timeout=10),
             mock.call(locator='<mock_locator>', root=sut.root, timeout=10)
         ]
         self.assertEqual(actual_calls, expected_calls)
@@ -87,7 +87,7 @@ class TestRegion(unittest.TestCase):
         self.assertEqual(cache.get_element(), mock_element)
         actual_calls = mock_wait_presence.call_args_list
         expected_calls = [
-            mock.call(locator='<mock_root_locator>', root=sut._driver, timeout=10),
+            mock.call(locator='<mock_root_locator>', root=self._mock_driver, timeout=10),
             mock.call(locator='<mock_locator>', root=sut.root, timeout=10)
         ]
         self.assertEqual(actual_calls, expected_calls)
@@ -150,7 +150,7 @@ class TestRegion(unittest.TestCase):
         self.assertEqual(actual.get_element(), mock_element)
         actual_calls = mock_wait_presence.call_args_list
         expected_calls = [
-            mock.call(locator='<mock_root_locator>', root=sut._driver, timeout=5),
+            mock.call(locator='<mock_root_locator>', root=self._mock_driver, timeout=5),
             mock.call(locator='<mock_locator>', root=sut.root, timeout=5)
         ]
         self.assertEqual(actual_calls, expected_calls)

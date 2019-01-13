@@ -4,8 +4,12 @@ from element_wrapper import Element, ElementList
 
 
 class Region(object):
-    def __init__(self, driver, presence_timeout=10):
-        self._driver = driver
+    def __init__(self, ancestor, presence_timeout=10):
+        """
+        :param ancestor: web driver/web element which starts to locate root
+        :param presence_timeout: timeout for waiting element presence
+        """
+        self._ancestor = ancestor
         self._cache = dict()
         self.presence_timeout = presence_timeout
         if getattr(self, '_root_locator', None) is None:
@@ -16,7 +20,7 @@ class Region(object):
     def root(self):
         return self.find_element(
             locator=self._root_locator,
-            root=self._driver
+            root=self._ancestor
         )
 
     def _wait_for_ready(self):
