@@ -6,7 +6,7 @@ from context import region
 
 class RegionForTest(region.Region):
     def __init__(self, ancestor):
-        self._root_locator = '<mock root locator>'
+        self._root_locator = '<mock_root_locator>'
         super(RegionForTest, self).__init__(ancestor)
 
     @property
@@ -35,11 +35,10 @@ class TestRegion(unittest.TestCase):
         mock_element = mock.Mock()
         mock_wait_presence.return_value = mock_element
         sut = self._init_sut()
-        sut._root_locator = '<mock_root_locator>'
         sut.check('test_element')
         actual_calls = mock_wait_presence.call_args_list
         expected_calls = [
-            mock.call(locator='<mock_root_locator>', root=self._mock_driver, timeout=.1),
+            mock.call(locator='<mock_root_locator>', root=self._mock_driver, timeout=10),
             mock.call(locator='<mock_locator>', root=sut.root, timeout=.1)
         ]
         self.assertEqual(actual_calls, expected_calls)
@@ -51,7 +50,6 @@ class TestRegion(unittest.TestCase):
         mock_wait_presence.return_value = mock_element
         mock_wait_all_presence.return_value = []
         sut = self._init_sut()
-        sut._root_locator = '<mock_root_locator>'
         with self.assertRaises(NoSuchElementException):
             sut.check('test_element_list')
         actual_calls = mock_wait_all_presence.call_args_list
@@ -65,7 +63,6 @@ class TestRegion(unittest.TestCase):
         mock_element = mock.Mock()
         mock_wait_presence.return_value = mock_element
         sut = self._init_sut()
-        sut._root_locator = '<mock_root_locator>'
         actual = sut.find_element('<mock_locator>')
         self.assertEqual(actual.get_element(), mock_element)
         actual_calls = mock_wait_presence.call_args_list
@@ -80,7 +77,6 @@ class TestRegion(unittest.TestCase):
         mock_element = mock.Mock()
         mock_wait_presence.return_value = mock_element
         sut = self._init_sut()
-        sut._root_locator = '<mock_root_locator>'
         actual = sut.find_element('<mock_locator>')  # access
         self.assertEqual(actual.get_element(), mock_element)
         cache = sut.find_element('<mock_locator>')   # access cache
@@ -98,7 +94,6 @@ class TestRegion(unittest.TestCase):
         mock_element = mock.Mock()
         mock_wait_all_presence.return_value = [mock_element]
         sut = self._init_sut()
-        sut._root_locator = '<mock_root_locator>'
         actual = sut.find_elements('<mock_locator>')
         self.assertEqual(actual.get_elements(), [mock_element])
         actual_calls = mock_wait_all_presence.call_args_list
@@ -118,7 +113,6 @@ class TestRegion(unittest.TestCase):
         mock_element = mock.Mock()
         mock_wait_all_presence.return_value = [mock_element]
         sut = self._init_sut()
-        sut._root_locator = '<mock_root_locator>'
         actual = sut.find_elements('<mock_locator>')
         self.assertEqual(actual.get_elements(), [mock_element])
         cached = sut.find_elements('<mock_locator>')
@@ -144,13 +138,12 @@ class TestRegion(unittest.TestCase):
         mock_element = mock.Mock()
         mock_wait_presence.return_value = mock_element
         sut = self._init_sut()
-        sut._root_locator = '<mock_root_locator>'
         sut.set_presence_timeout(5)
         actual = sut.find_element('<mock_locator>')
         self.assertEqual(actual.get_element(), mock_element)
         actual_calls = mock_wait_presence.call_args_list
         expected_calls = [
-            mock.call(locator='<mock_root_locator>', root=self._mock_driver, timeout=5),
+            mock.call(locator='<mock_root_locator>', root=self._mock_driver, timeout=10),
             mock.call(locator='<mock_locator>', root=sut.root, timeout=5)
         ]
         self.assertEqual(actual_calls, expected_calls)

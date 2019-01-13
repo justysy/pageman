@@ -12,7 +12,9 @@ class Region(object):
         self._ancestor = ancestor
         self._cache = dict()
         self.presence_timeout = presence_timeout
-        if getattr(self, '_root_locator', None) is None:
+        try:
+            _ = self.root
+        except AttributeError:
             raise NotImplementedError('_root_locator')
         self._wait_for_ready()
 
